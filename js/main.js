@@ -1,14 +1,36 @@
 "use strict";
 
 // Repeat 5 rounds, where each round does the following:
-// - INPUT: Set userChoice via prompting the user for rock, paper, or scissors
+// - INPUT: Set humanChoice via prompting the user for rock, paper, or scissors
 // - Set computerChoice by randomly assigning rock, paper, or scissors
-// - Compare userChoice with computerChoice and decide outcome of game
-// - Alter scores (userScore and computerScore) depending on outcome of game
+// - Compare humanChoice with computerChoice and decide outcome of game
+// - Alter scores (humanScore and computerScore) depending on outcome of game
 // - OUTPUT: Log to console the winner of the round
-// OUTPUT: Compare userScore and computerScore to announce the winner by logging to the console
+// OUTPUT: Compare humanScore and computerScore to announce the winner by logging to the console
 
-// - Set computerChoice by randomly assigning rock, paper, or scissors:
+// (- INPUT: Set humanChoice via prompting the user for rock, paper, or scissors):
+// INPUT: none
+// Ask the user for their choice
+// Put their input into a variable
+// Standardize the input to "rock", "paper", "scissors"; allowing "RoCk" for example
+// Check for input error and ask again if incorrect (not rock, paper, scissors)
+// OUTPUT: humanChoice (from rock, paper, or scissors)
+function getHumanChoice() {
+    let humanChoice;
+    let keepAsking = true;
+    while (keepAsking) {
+        humanChoice = prompt("Please choose rock, paper, or scissors", "rock");
+        if (humanChoice !== null) {
+            humanChoice = humanChoice.toLowerCase();
+            if      (humanChoice === "rock")     keepAsking = false;
+            else if (humanChoice === "paper")    keepAsking = false;
+            else if (humanChoice === "scissors") keepAsking = false;
+        }
+    }
+    return humanChoice;
+}
+
+// (- Set computerChoice by randomly assigning rock, paper, or scissors):
 // INPUT: none
 // Pick a random number between 0 and 2 inclusive
 // Assign rock, paper, scissors by:
