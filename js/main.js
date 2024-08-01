@@ -7,6 +7,40 @@
 // - Alter scores (humanScore and computerScore) depending on outcome of game
 // - OUTPUT: Log to console the winner of the round
 // OUTPUT: Compare humanScore and computerScore to announce the winner by logging to the console
+function playGame() {
+    function playRound(humanChoice, computerChoice) {
+        // Play Round
+        let humanWins;
+        if      (humanChoice === "rock")     humanWins = compareWithRock(humanChoice, computerChoice);
+        else if (humanChoice === "paper")    humanWins = compareWithPaper(humanChoice, computerChoice);
+        else if (humanChoice === "scissors") humanWins = compareWithScissors(humanChoice, computerChoice);
+    
+        // Update Score
+        if      (humanWins === 1)  humanScore++;
+        else if (humanWins === -1) computerScore++;
+    
+        // Log Score
+        console.log(`Human ${humanScore} - ${computerScore} Computer`);
+    }
+    
+    // Init scores
+    let humanScore = 0;
+    let computerScore = 0;
+
+    // Play 5 rounds
+    for (let round=1; round<=5; round++) {
+        console.log(`Round ${round}:`);
+        const humanSelection = getHumanChoice();
+        const computerSelection = getComputerChoice();
+        playRound(humanSelection, computerSelection);
+    }
+
+    // Announce winner
+    if      (humanScore > computerScore) console.log("You won the game!");
+    else if (humanScore < computerScore) console.log("You lost the game!");
+    else                                 console.log("The game is a draw!");
+    console.log(`Final Score: Human ${humanScore} - ${computerScore} Computer`);
+}
 
 // (- INPUT: Set humanChoice via prompting the user for rock, paper, or scissors):
 // INPUT: none
@@ -77,51 +111,42 @@ function getComputerChoiceTest() {
 // If humanChoice is paper then compare to computerChoice: similar to above
 // If humanChoice is scissors then compare to computerChoice: similar to above
 // OUTPUT: none (winner declared in console)
-function playRound(humanChoice, computerChoice) {
-    if      (humanChoice === "rock")     compareWithRock(humanChoice, computerChoice);
-    else if (humanChoice === "paper")    compareWithPaper(humanChoice, computerChoice);
-    else if (humanChoice === "scissors") compareWithScissors(humanChoice, computerChoice);
 
-    // Log Score
-    console.log(`Human ${humanScore} - ${computerScore} Computer`);
-}
+// UPDATE: 
+// - Moved playRound() declaration into playGame()
+// - Need to rework functions since scores are no longer global (return humanWins = +1,0,-1)
 function compareWithRock(humanChoice, computerChoice) {
-    if      (computerChoice === "rock")     roundIsDraw(computerChoice);
-    else if (computerChoice === "paper")    humanLoses(humanChoice, computerChoice);
-    else if (computerChoice === "scissors") humanWins(humanChoice, computerChoice);
+    if (computerChoice === "rock")     return roundIsDraw(computerChoice);
+    if (computerChoice === "paper")    return humanLoses(humanChoice, computerChoice);
+    if (computerChoice === "scissors") return humanWins(humanChoice, computerChoice);
 }
 function compareWithPaper(humanChoice, computerChoice) {
-    if      (computerChoice === "rock")     humanWins(humanChoice, computerChoice);
-    else if (computerChoice === "paper")    roundIsDraw(computerChoice);
-    else if (computerChoice === "scissors") humanLoses(humanChoice, computerChoice);
+    if (computerChoice === "rock")     return humanWins(humanChoice, computerChoice);
+    if (computerChoice === "paper")    return roundIsDraw(computerChoice);
+    if (computerChoice === "scissors") return humanLoses(humanChoice, computerChoice);
 }
 function compareWithScissors(humanChoice, computerChoice) {
-    if      (computerChoice === "rock")     humanLoses(humanChoice, computerChoice);
-    else if (computerChoice === "paper")    humanWins(humanChoice, computerChoice);
-    else if (computerChoice === "scissors") roundIsDraw(computerChoice);
+    if (computerChoice === "rock")     return humanLoses(humanChoice, computerChoice);
+    if (computerChoice === "paper")    return humanWins(humanChoice, computerChoice);
+    if (computerChoice === "scissors") return roundIsDraw(computerChoice);
 }
 // When log winner, need it in the format "You lose! Paper beats Rock"
 // Need a winner message, loser message, and draw message with the choices (capitalized) put in
 function humanLoses(humanChoice, computerChoice) {
     console.log(`You lose! ${capitalize(computerChoice)} beats ${capitalize(humanChoice)}`);
-    computerScore++;
+    return -1;
 }
 function humanWins(humanChoice, computerChoice) {
     console.log(`You win! ${capitalize(humanChoice)} beats ${capitalize(computerChoice)}`);
-    humanScore++;
+    return 1;
 }
 function roundIsDraw(choice) {
     console.log(`Draw! ${capitalize(choice)} ties with ${capitalize(choice)}`);
+    return 0;
 }
 function capitalize(inputString) {
     return inputString[0].toUpperCase() + inputString.slice(1);
 }
 
-// GLOBAL
-let humanScore = 0;
-let computerScore = 0;
-
-const humanSelection = getHumanChoice();
-const computerSelection = getComputerChoice();
-
-playRound(humanSelection, computerSelection);
+// Play Game
+playGame();
